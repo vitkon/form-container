@@ -1,0 +1,83 @@
+{
+    "name": "form-container",
+    "version": "0.0.1",
+    "description": "React form container and validator",
+    "keywords": [
+        "react",
+        "hoc",
+        "form",
+        "container",
+        "validation",
+        "typescript"
+    ],
+    "types": "./_bundles/lib/index.d.ts",
+    "files": [
+        "_bundles/",
+        "lib-esm"
+    ],
+    "module": "lib-esm/",
+    "scripts": {
+        "test": "jest --env=jsdom",
+        "test:coverage": "npm run test -- --coverage",
+        "clean": "shx rm -rf _bundles lib lib-esm",
+        "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && webpack"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/vitkon/form-container.git"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "hoist-non-react-statics": "^2.3.1",
+        "lodash": "^4.17.4",
+        "react": "^16.1.0",
+        "react-dom": "^16.1.0",
+        "shx": "^0.2.2",
+        "ts-loader": "^3.1.1",
+        "typescript": "^2.6.1",
+        "webpack": "^3.8.1"
+    },
+    "devDependencies": {
+        "@types/enzyme-adapter-react-16": "^1.0.1",
+        "@types/jest": "^21.1.6",
+        "@types/lodash": "^4.14.85",
+        "@types/react": "^16.0.22",
+        "dts-bundle": "^0.7.3",
+        "enzyme": "^3.2.0",
+        "enzyme-adapter-react-16": "^1.1.0",
+        "jest": "^21.2.1",
+        "raf": "^3.4.0",
+        "ts-jest": "^21.2.2"
+    },
+    "peerDependencies": {},
+    "jest": {
+        "transform": {
+            "^.+\\.tsx?$": "./node_modules/ts-jest/preprocessor.js"
+        },
+        "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+        "moduleFileExtensions": [
+            "ts",
+            "tsx",
+            "js",
+            "jsx",
+            "json"
+        ],
+        "collectCoverageFrom": [
+            "**/src/*.ts*",
+            "!**/src/index.ts",
+            "!**/src/*.d.ts"
+        ],
+        "coverageThreshold": {
+            "global": {
+                "branches": 0,
+                "functions": 0,
+                "lines": 0,
+                "statements": 0
+            }
+        },
+        "setupFiles": [
+            "raf/polyfill"
+        ],
+        "setupTestFrameworkScriptFile": "./src/setupTests.ts"
+    }
+}

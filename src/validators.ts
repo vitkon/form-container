@@ -9,8 +9,3 @@ export const hasError: ValidationRule = (prop, errorMessage) => [
     (model) => false,
     { [prop]: errorMessage }
 ];
-
-export default {
-    hasError,
-    isRequired
-}

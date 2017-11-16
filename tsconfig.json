@@ -1,25 +1,37 @@
 {
     "compilerOptions": {
-      "moduleResolution": "node",
-      "module": "commonjs",
-      "target": "es5",
-      "lib": [ "es2015", "es6", "es7", "dom" ],
-      "jsx": "react",
-      "outDir": "lib",
       "allowSyntheticDefaultImports": true,
-      "suppressImplicitAnyIndexErrors": true,
+      "declaration": true,
       "forceConsistentCasingInFileNames": true,
-      "rootDir": "src",
+      "jsx": "react",
+      "lib": ["es7", "dom" ],
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "noImplicitAny": true,
       "noImplicitReturns": true,
       "noImplicitThis": true,
-      "noImplicitAny": true,
-      "strictNullChecks": true,
       "noUnusedLocals": true,
-      "declaration": true
+      "outDir": "ts-build",
+      "rootDir": "src",
+      "strictNullChecks": true,
+      "suppressImplicitAnyIndexErrors": true,
+      "target": "es5",
+      "types": [
+        "node"
+      ]
     },
-    "files": [
-      "./src/index.ts"
-    ],
     "compileOnSave": false,
-    "buildOnSave": false
+    "buildOnSave": false,
+    "include": [
+      "src/**/*"
+    ],
+    "exclude": [
+      "node_modules",
+      "dist",
+      "**/*.test.ts*",
+      "src/setupTests.ts"
+    ],
+    "typeRoots": [
+       "node_modules/@types"
+    ]
   }

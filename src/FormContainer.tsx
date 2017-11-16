@@ -1,31 +1,10 @@
 import * as React from 'react';
-import { isNil, flow } from 'lodash';
+import { flow, isNil } from 'lodash';
 import { validate } from './validate';
-import { ComponentInstance } from './interfaces';
 
 const hoistNonReactStatics = require('hoist-non-react-statics');
 
-export interface IFormProps<T = any> {
-    form: {
-        model: any;
-        inputs: any;
-        isValid?: boolean;
-        validationErrors: { [key: string]: string };
-        touched: { [key: string]: boolean };
-    };
-    formMethods: {
-        bindInput: (name: string) => any;
-        bindToChangeEvent: (e: React.ChangeEvent<any>) => void;
-        setProperty: (prop: keyof T, value: T[keyof T]) => any;
-        setModel: (model: {
-            [name in keyof T]?: any
-        }) => any;
-        setFieldToTouched: (prop: keyof T) => any;
-    };
-    initialModel?: any;
-}
-
-const makeWrapper = <T extends {}>(middleware?: any) => (WrappedComponent: ComponentInstance) => {
+const makeWrapper = <T extends {}>(middleware?: any) => (WrappedComponent: any) => {
     class FormWrapper extends React.Component<any, any> {
         constructor(props: any, context: any) {
             super(props, context);
@@ -96,12 +75,11 @@ const makeWrapper = <T extends {}>(middleware?: any) => (WrappedComponent: Compo
         }
 
         bindToFocusEvent = (e: React.FocusEvent<any>) => {
-            const target = e.target as HTMLInputElement;
-            this.setFieldToTouched(target.name as keyof T);
         }
 
         bindToBlurEvent = (e: React.FocusEvent<any>) => {
-            // do something
+            const target = e.target as HTMLInputElement;
+            this.setFieldToTouched(target.name as keyof T);
         }
 
         bindInput = (name: keyof T) => ({
@@ -149,7 +127,7 @@ const makeWrapper = <T extends {}>(middleware?: any) => (WrappedComponent: Compo
     return hoistNonReactStatics(FormWrapper, WrappedComponent);
 };
 
-export default (validators: any[] = []) => (Component: any) => (
+export const connectForm = (validators: any[] = [], middleware?: any) => (Component: any) => (
     flow([
         validate(validators),
         makeWrapper()

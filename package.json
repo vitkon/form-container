@@ -1,7 +1,7 @@
 {
     "name": "form-container",
-    "version": "0.0.1",
-    "description": "React form container and validator",
+    "version": "0.0.22",
+    "description": "Lightweight React form container with validation (written in TypeScript)",
     "keywords": [
         "react",
         "hoc",
@@ -10,17 +10,13 @@
         "validation",
         "typescript"
     ],
-    "types": "./_bundles/lib/index.d.ts",
-    "files": [
-        "_bundles/",
-        "lib-esm"
-    ],
-    "module": "lib-esm/",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "scripts": {
         "test": "jest --env=jsdom",
         "test:coverage": "npm run test -- --coverage",
         "clean": "shx rm -rf _bundles lib lib-esm",
-        "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && webpack"
+        "build": "rimraf dist && webpack --hide-modules && rimraf dist/ts-build"
     },
     "repository": {
         "type": "git",
@@ -47,6 +43,7 @@
         "enzyme-adapter-react-16": "^1.1.0",
         "jest": "^21.2.1",
         "raf": "^3.4.0",
+        "rimraf": "^2.6.2",
         "ts-jest": "^21.2.2"
     },
     "peerDependencies": {},
@@ -54,7 +51,7 @@
         "transform": {
             "^.+\\.tsx?$": "./node_modules/ts-jest/preprocessor.js"
         },
-        "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+        "testMatch": ["**/src/**/?(*.)(spec|test).ts?(x)" ],
         "moduleFileExtensions": [
             "ts",
             "tsx",

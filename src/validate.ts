@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { hasError } from './validators';
 import { isEmpty, forEach } from 'lodash';
+import { hasError } from './validators';
 import { ComponentInstance } from './interfaces';
 
 const hoistNonReactStatics = require('hoist-non-react-statics');
@@ -34,7 +34,7 @@ const inferRulesFromAttributes = (rules: any[], { inputs }: any) => {
     return extendedRules;
 };
 
-export const validate = (rules: any[]) => (WrappedComponent: ComponentInstance) => {
+export const validate = (rules: any[] = []) => (WrappedComponent: ComponentInstance) => {
     const validated = (props: any) => {
         const extendedRules = inferRulesFromAttributes(rules, props.form);
         const validationErrors = getValidationErrors(extendedRules, props.form.model);

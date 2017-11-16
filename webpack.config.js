@@ -1,30 +1,12 @@
 var path = require('path');
 var webpack = require('webpack');
 
-var PATHS = {
-  entryPoint: path.resolve(__dirname, 'src/index.ts'),
-  bundles: path.resolve(__dirname, '_bundles'),
-}
-
 var config = {
-  // These are the entry point of our library. We tell webpack to use
-  // the name we assign later, when creating the bundle. We also use
-  // the name to filter the second entry point for applying code
-  // minification via UglifyJS
-  entry: {
-    'form-container': [PATHS.entryPoint],
-    'form-container.min': [PATHS.entryPoint]
-  },
-  // The output defines how and where we want the bundles. The special
-  // value `[name]` in `filename` tell Webpack to use the name we defined above.
-  // We target a UMD and name it MyLib. When including the bundle in the browser
-  // it will be accessible at `window.MyLib`
+  entry: ['./src/main.ts'],
   output: {
-    path: PATHS.bundles,
-    filename: '[name].js',
-    libraryTarget: 'umd',
-    library: 'FormContainer',
-    umdNamedDefine: true
+    libraryTarget: 'commonjs-module',
+    path: path.join(__dirname, 'dist'),
+    filename: 'index.js',
   },
   // Add resolve for `tsx` and `ts` files, otherwise Webpack would
   // only look for common JavaScript file extension (.js)
@@ -69,10 +51,9 @@ DtsBundlePlugin.prototype.apply = function (compiler) {
 
     dts.bundle({
       name: 'form-container',
-      main: 'lib/**/*.d.ts',
-      out: 'index.d.ts',
-      removeSource: true,
-      outputAsModuleFolder: true // to use npm in-package typings
+      main: 'dist/ts-build/main.d.ts',
+      out: '../index.d.ts',
+      removeSource: false, // these are needed to --watch
     });
   });
 };

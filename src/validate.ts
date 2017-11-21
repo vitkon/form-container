@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { isEmpty, forEach } from 'lodash';
+import { get, isEmpty, forEach } from 'lodash';
 import { hasError } from './validators';
 import { ComponentInstance } from './interfaces';
 
@@ -25,7 +25,7 @@ const inferRulesFromAttributes = (rules: any[], { inputs }: any) => {
     const extendedRules = [...rules];
 
     forEach(inputs, (input: any) => {
-        if (input.validity.valid === false) {
+        if (get(input, 'validity.valid') === false) {
             const rule = hasError<any>(input.name, input.validationMessage);
             extendedRules.push(rule);
         }

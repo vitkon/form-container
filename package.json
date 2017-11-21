@@ -15,6 +15,7 @@
     "scripts": {
         "test": "jest --env=jsdom",
         "test:coverage": "npm run test -- --coverage",
+        "test:dev": "npm run test -- --watch",
         "clean": "shx rm -rf _bundles lib lib-esm",
         "build": "rimraf dist && webpack --hide-modules && rimraf dist/ts-build"
     },

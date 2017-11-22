@@ -31,3 +31,8 @@ export interface IFormProps<T = any> {
     };
     initialModel?: any;
 }
+
+export interface IFormConfig<T = any> {
+    initialModel?: Partial<T>;
+    middleware?: (props: T) => any;
+}

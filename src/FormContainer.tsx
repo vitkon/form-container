@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { flow, isNil } from 'lodash';
 import { validate } from './validate';
+import { IFormConfig } from './interfaces';
 
 const hoistNonReactStatics = require('hoist-non-react-statics');
 
-const makeWrapper = <T extends {}>(middleware?: any) => (WrappedComponent: any) => {
+const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: any) => {
     class FormWrapper extends React.Component<any, any> {
         constructor(props: any, context: any) {
             super(props, context);
             this.state = {
-                model: props.initialModel || {},
+                model: config.initialModel || {},
                 touched: {},
                 inputs: {}
             };
@@ -116,8 +117,8 @@ const makeWrapper = <T extends {}>(middleware?: any) => (WrappedComponent: any) 
                 }
             });
 
-            const finalProps = typeof middleware === 'function'
-                ? middleware(nextProps)
+            const finalProps = config.middleware
+                ? config.middleware(nextProps)
                 : nextProps;
 
             return React.createElement(WrappedComponent, finalProps);
@@ -127,9 +128,12 @@ const makeWrapper = <T extends {}>(middleware?: any) => (WrappedComponent: any) 
     return hoistNonReactStatics(FormWrapper, WrappedComponent);
 };
 
-export const connectForm = (validators: any[] = [], middleware?: any) => (Component: any) => (
+export const connectForm = <T extends {} = any>(
+    validators: any[] = [],
+    config: IFormConfig<T> = {}
+) => (Component: any) => (
     flow([
         validate(validators),
-        makeWrapper()
+        makeWrapper<T>(config)
     ])(Component)
 );

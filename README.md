@@ -38,7 +38,7 @@ interface IProps extends IFormProps {}
 export class Form extends React.Component<IProps, {}> {
     handleSubmit = (e: any) => {
         e.preventDefault();
-        const { model } = this.props;
+        const { model } = this.props.form;
         console.log(model);
     }
 

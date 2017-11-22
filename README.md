@@ -22,7 +22,23 @@ or
 yarn add form-container
 ```
 
+## Getting started
+
+<a id="connectForm"></a>
+### `connectForm([validators], [formConfig])(WrappedComponent)`
+`form-container` exposes `connectForm` function to connect an arbitrary form component (`WrappedComponent`).
+It does not modify the component class passed to it; instead, it *returns* a new, connected component class for you to use.
+
+<a id="connect-form-arguments"></a>
+#### Arguments
+
+* [`validators: ValidationRule[]`] \(*Array*): An array of rules can be provided to validate the form model against them. Rules are executed in a sequence that is defined in the array.  
+
+* [`formConfig: IFormConfig`] \(*Object*): An object contains initial configuration for the form  
+
+
 ## Validation
+
 
 ### HTML5 validation example
 
@@ -70,8 +86,14 @@ export class Form extends React.Component<IProps, {}> {
 // no custom validators
 const validators: any[] = [];
 
+const formConfig = {
+    initialModel: {
+        test: 'foo'
+    }
+}
+
 // attaching our Form to form-container with validation
-export default connectForm(validators)(Form);
+export default connectForm(validators, formConfig)(Form);
 ```
 
 ### Custom validation example

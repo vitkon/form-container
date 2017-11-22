@@ -24,11 +24,15 @@ describe('Form container', () => {
         foo: 'bananas'
       }
 
-      const WrapperComponent = connectForm()(MockComponent);
+      const formConfig = {
+        initialModel: {
+          foo: 'bananas'
+        },
+        middleware: (props: any) => ({ ...props, bar: 'baz' })
+      }
+      const WrapperComponent = connectForm([], formConfig)(MockComponent);
       wrapperComponent = mount(
-        <WrapperComponent
-          initialModel={initialModel}
-        />
+        <WrapperComponent />
       );
       wrappedComponent = wrapperComponent.find(MockComponent);
       input = wrapperComponent.find('input');
@@ -81,6 +85,10 @@ describe('Form container', () => {
 
       it('should have formMethods setFieldToTouched prop', () => {
         expect(wrappedComponent.props().formMethods).toHaveProperty('setFieldToTouched');
+      });
+
+      it('should get run provided middleware', () => {
+        expect(wrappedComponent.props()).toHaveProperty('bar');
       });
     });
 

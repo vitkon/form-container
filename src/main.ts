@@ -1,3 +1,3 @@
 export { connectForm } from './FormContainer';
-export { IFormProps, FormConfig, ValidationRule } from './interfaces';
-export { isRequired } from './validators';
+export { IFormProps, IFormConfig, ValidationRule } from './interfaces';
+export { isRequired, ValidationRuleFactory } from './validators';

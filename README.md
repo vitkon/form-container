@@ -36,11 +36,17 @@ import { connectForm, IFormProps } from 'form-container';
 interface IProps extends IFormProps {}
 
 export class Form extends React.Component<IProps, {}> {
+    handleSubmit = (e: any) => {
+        e.preventDefault();
+        const { model } = this.props;
+        console.log(model);
+    }
+
     render() {
         const { validationErrors, touched } = this.props.form;
         const { bindInput } = this.props.formMethods;
         return (
-            <form>
+            <form onSubmit={this.handleSubmit}>
                 <div>
                     <label>
                         Required field
@@ -52,6 +58,9 @@ export class Form extends React.Component<IProps, {}> {
                         />
                         <small>{touched.test && validationErrors.test}</small>
                     </label>
+                </div>
+                <div>
+                    <button type="submit">Submit</button>
                 </div>
             </form>
         );

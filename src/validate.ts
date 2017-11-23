@@ -5,11 +5,15 @@ import { ComponentInstance } from './interfaces';
 
 const hoistNonReactStatics = require('hoist-non-react-statics');
 
-const getValidationErrors = (rules: any[], model: {
-    [name in string]: any;
-}) => rules.reduce(
+const getValidationErrors = (
+    rules: any[],
+    model: {
+        [name in string]: any;
+    },
+    allProps: any
+) => rules.reduce(
     (errors, [rule, field]) => {
-        const isValid = rule(model);
+        const isValid = rule(model, allProps);
 
         if (isValid) { return errors; }
 
@@ -37,7 +41,7 @@ const inferRulesFromAttributes = (rules: any[], { inputs }: any) => {
 export const validate = (rules: any[] = []) => (WrappedComponent: ComponentInstance) => {
     const validated = (props: any) => {
         const extendedRules = inferRulesFromAttributes(rules, props.form);
-        const validationErrors = getValidationErrors(extendedRules, props.form.model);
+        const validationErrors = getValidationErrors(extendedRules, props.form.model, props);
         return React.createElement(WrappedComponent, Object.assign({}, props, {
             form: {
                 ...props.form,

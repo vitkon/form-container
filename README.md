@@ -36,6 +36,9 @@ It does not modify the component class passed to it; instead, it *returns* a new
 
 * [`formConfig: IFormConfig`] \(*Object*): An object contains initial configuration for the form  
 
+    - `initialModel: Partial<T>` — object provides initial values to the form fields
+    - `middleware: (props: T) => any` — function transforms props passed to the wrapped component
+    - `onInputBlur: (e: React.ForcusEvent<any>) => any` — function is called on every blur on an input field within the form. Adding a custom `onBlur` to the input field itself is not recommended, use this method instead
 
 ## Validation
 

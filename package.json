@@ -64,7 +64,8 @@
         ],
         "collectCoverageFrom": [
             "**/src/*.ts*",
-            "!**/src/index.ts",
+            "!**/src/main.ts",
+            "!**/src/interfaces.ts",
             "!**/src/*.d.ts"
         ],
         "coverageThreshold": {

@@ -34,5 +34,6 @@ export interface IFormProps<T = any> {
 
 export interface IFormConfig<T = any> {
     initialModel?: Partial<T>;
+    onInputBlur?: (e: React.FocusEvent<any>) => any;
     middleware?: (props: T) => any;
 }

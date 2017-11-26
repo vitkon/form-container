@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { flow, isNil } from 'lodash';
 import * as validation from './validate';
-import { IFormConfig } from './interfaces';
+import { IFormConfig, IFormState } from './interfaces';
 
 const hoistNonReactStatics = require('hoist-non-react-statics');
 
@@ -83,7 +83,9 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
             this.setFieldToTouched(target.name as keyof T);
 
             if (config.onInputBlur) {
-                config.onInputBlur(e);
+                config.onInputBlur(e, {
+                    form: this.getFormState()
+                });
             }
         }
 
@@ -103,15 +105,17 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
                     }); 
                 }
             }
-        })
+        });
+
+        private getFormState = (): Partial<IFormState> => ({
+            model: this.state.model,
+            inputs: this.state.inputs,
+            touched: this.state.touched
+        });
 
         render() {
             const nextProps = Object.assign({}, this.props, {
-                form: {
-                    model: this.state.model,
-                    inputs: this.state.inputs,
-                    touched: this.state.touched,
-                },
+                form: this.getFormState(),
                 formMethods: {
                     bindInput: this.bindInput,
                     bindToChangeEvent: this.bindToChangeEvent,

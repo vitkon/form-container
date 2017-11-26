@@ -7,19 +7,21 @@ export type ErrorMessage = {
     [name: string]: string | undefined
 }
 
-export type ValidationRule = <T = any>(prop: keyof T, errorMessage: string, attr?: any) => [
+export type ValidationRule = <T = any>(prop: keyof T, errorMessage?: string, attr?: any) => [
     Validator,
     ErrorMessage
 ];
 
+export interface IFormState {
+    model: any;
+    inputs: any;
+    isValid?: boolean;
+    validationErrors: { [key: string]: string };
+    touched: { [key: string]: boolean };
+}
+
 export interface IFormProps<T = any> {
-    form: {
-        model: any;
-        inputs: any;
-        isValid?: boolean;
-        validationErrors: { [key: string]: string };
-        touched: { [key: string]: boolean };
-    };
+    form: IFormState;
     formMethods: {
         bindInput: (name: string) => any;
         bindToChangeEvent: (e: React.ChangeEvent<any>) => void;
@@ -34,6 +36,9 @@ export interface IFormProps<T = any> {
 
 export interface IFormConfig<T = any> {
     initialModel?: Partial<T>;
-    onInputBlur?: (e: React.FocusEvent<any>) => any;
+    onInputBlur?: (
+        e: React.FocusEvent<any>,
+        formState?: {form: Partial<IFormState>}
+    ) => any;
     middleware?: (props: T) => any;
 }

@@ -2,12 +2,12 @@ import * as React from 'react';
 export type ComponentInstance<P = any, S = any> = new () => React.Component<P, S>
 
 
-export type Validator = (model: any) => boolean
+export type Validator = (model: any, allProps?: any) => boolean
 export type ErrorMessage = {
     [name: string]: string | undefined
 }
 
-export type ValidationRule = <T = any>(prop: keyof T, errorMessage?: string, attr?: any) => [
+export type ValidationRule = <T = any>(prop: keyof T, errorMessage: string, attr?: any) => [
     Validator,
     ErrorMessage
 ];
@@ -34,5 +34,6 @@ export interface IFormProps<T = any> {
 
 export interface IFormConfig<T = any> {
     initialModel?: Partial<T>;
+    onInputBlur?: (e: React.FocusEvent<any>) => any;
     middleware?: (props: T) => any;
 }

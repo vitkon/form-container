@@ -1,8 +1,6 @@
-[![Build Status](https://travis-ci.org/vitkon/form-container.svg?branch=master)](https://travis-ci.org/vitkon/form-container) [![npm version](https://img.shields.io/npm/v/form-container.svg?style=flat)](https://www.npmjs.com/package/form-container) [![Coverage Status](https://coveralls.io/repos/github/vitkon/form-container/badge.svg?branch=master)](https://coveralls.io/github/vitkon/form-container?branch=master)
-
 # Form Container
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/vitkon/form-container.svg)](https://greenkeeper.io/)
+[![Build Status](https://travis-ci.org/vitkon/form-container.svg?branch=master)](https://travis-ci.org/vitkon/form-container) [![npm version](https://img.shields.io/npm/v/form-container.svg?style=flat)](https://www.npmjs.com/package/form-container) [![Coverage Status](https://coveralls.io/repos/github/vitkon/form-container/badge.svg?branch=master)](https://coveralls.io/github/vitkon/form-container?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/vitkon/form-container.svg)](https://greenkeeper.io/)
 
 Form container is a lightweight React form container with validation (written in TypeScript).
 It allows you to use both HTML5 form validation and custom validation functions.

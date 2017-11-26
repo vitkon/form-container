@@ -2,6 +2,8 @@
 
 # Form Container
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/vitkon/form-container.svg)](https://greenkeeper.io/)
+
 Form container is a lightweight React form container with validation (written in TypeScript).
 It allows you to use both HTML5 form validation and custom validation functions.
 

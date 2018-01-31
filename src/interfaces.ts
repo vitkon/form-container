@@ -12,6 +12,25 @@ export type ValidationRule = <T = any>(prop: keyof T, errorMessage: string, attr
     ErrorMessage
 ];
 
+export interface IBoundInput<T = any> {
+    name: string;
+    value: (name: keyof T) => string;
+    onChange: (e: React.ChangeEvent<any>) => void;
+    onFocus: (e: React.FocusEvent<any>) => void;
+    onBlur: (e: React.FocusEvent<any>) => void;
+    ref: (input: any) => void;
+}
+
+export interface IFormMethods<T = any> {
+    bindInput: (name: string) => IBoundInput<T>;
+    bindToChangeEvent: (e: React.ChangeEvent<any>) => void;
+    setProperty: (prop: keyof T, value: T[keyof T]) => any;
+    setModel: (model: {
+        [name in keyof T]?: any
+    }) => any;
+    setFieldToTouched: (prop: keyof T) => any;
+}
+
 export interface IFormProps<T = any> {
     form: {
         model: any;
@@ -20,15 +39,7 @@ export interface IFormProps<T = any> {
         validationErrors: { [key: string]: string };
         touched: { [key: string]: boolean };
     };
-    formMethods: {
-        bindInput: (name: string) => any;
-        bindToChangeEvent: (e: React.ChangeEvent<any>) => void;
-        setProperty: (prop: keyof T, value: T[keyof T]) => any;
-        setModel: (model: {
-            [name in keyof T]?: any
-        }) => any;
-        setFieldToTouched: (prop: keyof T) => any;
-    };
+    formMethods: IFormMethods<T>;
     initialModel?: any;
 }
 

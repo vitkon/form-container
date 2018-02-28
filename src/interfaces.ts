@@ -12,7 +12,7 @@ export type ValidationRule = <T = any>(prop: keyof T, errorMessage: string, attr
     ErrorMessage
 ];
 
-export interface IBoundInput<T = any> {
+export interface IBoundInput {
     name: string;
     value: string;
     onChange: (e: React.ChangeEvent<any>) => void;
@@ -22,7 +22,7 @@ export interface IBoundInput<T = any> {
 }
 
 export interface IFormMethods<T = any> {
-    bindInput: (name: string) => IBoundInput<T>;
+    bindInput: (name: keyof T) => IBoundInput;
     bindToChangeEvent: (e: React.ChangeEvent<any>) => void;
     setProperty: (prop: keyof T, value: T[keyof T]) => any;
     setModel: (model: {

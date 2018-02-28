@@ -14,7 +14,7 @@ export type ValidationRule = <T = any>(prop: keyof T, errorMessage: string, attr
 
 export interface IBoundInput<T = any> {
     name: string;
-    value: (name: keyof T) => string;
+    value: string;
     onChange: (e: React.ChangeEvent<any>) => void;
     onFocus: (e: React.FocusEvent<any>) => void;
     onBlur: (e: React.FocusEvent<any>) => void;

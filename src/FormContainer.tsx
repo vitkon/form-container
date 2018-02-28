@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { flow, isNil } from 'lodash';
 import * as validation from './validate';
-import { IFormConfig } from './interfaces';
+import { IFormConfig, IBoundInput } from './interfaces';
 
 const hoistNonReactStatics = require('hoist-non-react-statics');
 
@@ -59,7 +59,7 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
             return '';
         }
 
-        bindToChangeEvent = (e: React.ChangeEvent<any>) => {
+        bindToChangeEvent = (e: React.ChangeEvent<any>): void => {
             const { name, type } = e.target;
             let { value } = e.target;
 
@@ -75,10 +75,10 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
             this.setProperty(name, value);
         }
 
-        bindToFocusEvent = (e: React.FocusEvent<any>) => {
+        bindToFocusEvent = (e: React.FocusEvent<any>): void => {
         }
 
-        bindToBlurEvent = (e: React.FocusEvent<any>) => {
+        bindToBlurEvent = (e: React.FocusEvent<any>): void => {
             const target = e.target as HTMLInputElement;
             this.setFieldToTouched(target.name as keyof T);
 
@@ -87,7 +87,7 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
             }
         }
 
-        bindInput = (name: keyof T) => ({
+        bindInput = (name: keyof T): IBoundInput => ({
             name,
             value: this.getValue(name),
             onChange: this.bindToChangeEvent,

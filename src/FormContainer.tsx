@@ -14,50 +14,33 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
                 touched: {},
                 inputs: {}
             };
-
         }
 
-        setModel = (model: {
-            [name in keyof T]: any
-            }) => {
+        setModel = (model: { [name in keyof T]: any }) => {
             this.setState({ model });
             return model;
-        }
+        };
 
-        setProperty = (prop: keyof T, value: any) => this.setModel(
-            Object.assign(
-                {},
-                this.state.model,
-                { [prop]: value }
-            )
-        )
+        setProperty = (prop: keyof T, value: any) =>
+            this.setModel(Object.assign({}, this.state.model, { [prop]: value }));
 
-        setTouched = (touched: {
-            [name in keyof T]: any
-            }) => {
+        setTouched = (touched: { [name in keyof T]: any }) => {
             this.setState({ touched });
             return touched;
-        }
+        };
 
-        setFieldToTouched = (prop: keyof T) => this.setTouched(
-            Object.assign(
-                {},
-                this.state.touched,
-                { [prop]: true }
-            )
-        )
+        setFieldToTouched = (prop: keyof T) =>
+            this.setTouched(Object.assign({}, this.state.touched, { [prop]: true }));
 
         getValue = (name: keyof T) => {
-            const {
-                state: { model: { [name]: modelValue } }
-            } = this;
+            const { state: { model: { [name]: modelValue } } } = this;
 
             if (!isNil(modelValue)) {
                 return modelValue;
             }
 
             return '';
-        }
+        };
 
         bindToChangeEvent = (e: React.ChangeEvent<any>): void => {
             const { name, type } = e.target;
@@ -73,10 +56,9 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
             }
 
             this.setProperty(name, value);
-        }
+        };
 
-        bindToFocusEvent = (e: React.FocusEvent<any>): void => {
-        }
+        bindToFocusEvent = (e: React.FocusEvent<any>): void => {};
 
         bindToBlurEvent = (e: React.FocusEvent<any>): void => {
             const target = e.target as HTMLInputElement;
@@ -85,7 +67,7 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
             if (config.onInputBlur) {
                 config.onInputBlur(e);
             }
-        }
+        };
 
         bindInput = (name: keyof T): IBoundInput => ({
             name,
@@ -93,24 +75,24 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
             onChange: this.bindToChangeEvent,
             onFocus: this.bindToFocusEvent,
             onBlur: this.bindToBlurEvent,
-            ref: (input: any) => { 
+            ref: (input: any) => {
                 if (!this.state.inputs[name]) {
                     this.setState({
                         inputs: {
                             ...this.state.inputs,
                             [name]: input
                         }
-                    }); 
+                    });
                 }
             }
-        })
+        });
 
         render() {
             const nextProps = Object.assign({}, this.props, {
                 form: {
                     model: this.state.model,
                     inputs: this.state.inputs,
-                    touched: this.state.touched,
+                    touched: this.state.touched
                 },
                 formMethods: {
                     bindInput: this.bindInput,
@@ -121,9 +103,7 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
                 }
             });
 
-            const finalProps = config.middleware
-                ? config.middleware(nextProps)
-                : nextProps;
+            const finalProps = config.middleware ? config.middleware(nextProps) : nextProps;
 
             return React.createElement(WrappedComponent, finalProps);
         }
@@ -135,9 +115,4 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
 export const connectForm = <T extends {} = any>(
     validators: any[] = [],
     config: IFormConfig<T> = {}
-) => (Component: any) => (
-    flow([
-        validation.validate(validators),
-        makeWrapper<T>(config)
-    ])(Component)
-);
+) => (Component: any) => flow([validation.validate(validators), makeWrapper<T>(config)])(Component);

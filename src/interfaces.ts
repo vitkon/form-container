@@ -18,7 +18,7 @@ export interface IBoundInput {
     onChange: (e: React.ChangeEvent<any>) => void;
     onFocus: (e: React.FocusEvent<any>) => void;
     onBlur: (e: React.FocusEvent<any>) => void;
-    ref: (input: any) => void;
+    ref?: (input: any) => void;
 }
 
 export interface IFormMethods<T = any> {
@@ -41,8 +41,8 @@ export interface IFormProps<T = any> {
     initialModel?: any;
 }
 
-export interface IFormConfig<T = object, M = object> {
+export interface IFormConfig<T = any> {
     initialModel?: Partial<T>;
     onInputBlur?: (e: React.FocusEvent<any>) => any;
-    middleware?: (props: T) => T & M;
+    middleware?: (props: T) => any;
 }

@@ -2,7 +2,7 @@
   "name": "form-container",
   "version": "0.1.4",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=6.0.0"
   },
   "description": "Lightweight React form container with validation (written in TypeScript)",
   "keywords": [

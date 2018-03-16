@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { connectForm, IFormProps } from '../../src/main';
+import JSONTree from 'react-json-tree';
 import * as styles from './form.module.css';
-import JsonView from 'react-pretty-json';
-import 'react-pretty-json/assets/json-view.css';
+
 import { isRequired } from '../../src/validators';
 
 export interface IProps extends IFormProps {}
 
 export const Form: React.SFC<IProps> = props => {
     const { bindInput } = props.formMethods;
+    console.log('<<<', props);
     return (
         <div className={styles.view}>
             <div className={styles.form}>
@@ -31,12 +32,21 @@ export const Form: React.SFC<IProps> = props => {
                 </form>
             </div>
             <div className={styles.json}>
-                <JsonView json={props.form} />
+                <JSONTree data={props.form} />
             </div>
         </div>
     );
 };
 
-export const ConnectedForm = connectForm([isRequired('username', 'please enter your username')])(
-    Form
-);
+export const ConnectedForm = connectForm<IProps>(
+    [isRequired('username', 'please enter your username')],
+    {
+        middleware: props => {
+            console.log('>>>', props);
+            return {
+                ...props,
+                test: 'one'
+            };
+        }
+    }
+)(Form);

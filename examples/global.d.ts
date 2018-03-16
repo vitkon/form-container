@@ -1,2 +1,2 @@
 declare module '*.css';
-declare module 'react-pretty-json';
+declare module 'react-json-tree';

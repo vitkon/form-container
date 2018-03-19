@@ -18,7 +18,7 @@ export interface IBoundInput {
     onChange: (e: React.ChangeEvent<any>) => void;
     onFocus: (e: React.FocusEvent<any>) => void;
     onBlur: (e: React.FocusEvent<any>) => void;
-    ref: (input: any) => void;
+    ref?: (input: any) => void;
 }
 
 export interface IFormMethods<T = any> {

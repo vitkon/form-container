@@ -5,14 +5,14 @@ import { connectForm } from '../FormContainer';
 import * as validation from '../validate';
 import { isRequired } from '../validators';
 
-const setupTest = (formConfig = {}, validators = []) => {
+const setupTest = (formConfig = {}) => {
     const MockComponent = ({ formMethods: { bindInput, bindNativeInput }, form }) => (
         <form>
             <input {...bindInput('foo')} />
             <input {...bindNativeInput('nativeFoo')} />
         </form>
     );
-    const WrapperComponent = connectForm(validators, formConfig)(MockComponent);
+    const WrapperComponent = connectForm(formConfig)(MockComponent);
     const wrapperComponent = mount(<WrapperComponent />);
     const wrappedComponent = wrapperComponent.find(MockComponent);
     const input = wrapperComponent.find('[name="foo"]');
@@ -34,7 +34,7 @@ describe('Form container', () => {
     it('should call validate function', () => {
         const mock = jest.fn(rules => component => component);
         (validation as any).validate = jest.fn(rules => component => component);
-        const { wrappedComponent } = setupTest({}, [isRequired]);
+        const { wrappedComponent } = setupTest({ validators: [isRequired] });
         expect(validation.validate).toHaveBeenCalledTimes(1);
         expect(validation.validate).toHaveBeenCalledWith([isRequired]);
         mock.mockClear();

@@ -63,7 +63,7 @@ export class Form extends React.Component<IProps, {}> {
 
     render() {
         const { validationErrors, touched } = this.props.form;
-        const { bindInput } = this.props.formMethods;
+        const { bindInput, bindNativeInput } = this.props.formMethods;
         return (
             <form onSubmit={this.handleSubmit}>
                 <div>
@@ -71,9 +71,9 @@ export class Form extends React.Component<IProps, {}> {
                         Required field
                         <input
                             {/* HTML attribute to validate required field */}
-                            required="true"
+                            required={true}
                             {/* this is how you bind input to a form-container */}
-                            {...bindInput('test')}
+                            {...bindNativeInput('test')}
                         />
                         <small>{touched.test && validationErrors.test}</small>
                     </label>

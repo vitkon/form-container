@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { get, isEmpty, forEach } from 'lodash';
 import { hasError } from './validators';
-import { ComponentInstance } from './interfaces';
+import { ComponentInstance, IFormConfig } from './interfaces';
 
 const hoistNonReactStatics = require('hoist-non-react-statics');
 
@@ -24,7 +24,7 @@ const inferRulesFromAttributes = (rules: any[], { inputs }: any) => {
 
     forEach(inputs, (input: any) => {
         if (get(input, 'validity.valid') === false) {
-            const rule = hasError<any>(input.name, input.validationMessage);
+            const rule = hasError(input.name, input.validationMessage);
             extendedRules.push(rule);
         }
     });
@@ -32,17 +32,31 @@ const inferRulesFromAttributes = (rules: any[], { inputs }: any) => {
     return extendedRules;
 };
 
-export const validate = (rules: any[] = []) => (WrappedComponent: ComponentInstance) => {
+export const validate = ({ errors, warnings }: IFormConfig) => (
+    WrappedComponent: ComponentInstance
+) => {
     const validated = (props: any) => {
-        const extendedRules = inferRulesFromAttributes(rules, props.form);
-        const validationErrors = getValidationErrors(extendedRules, props.form.model, props);
+        let extendedErrors = [];
+        let validationErrors = {};
+        let validationWarnings = {};
+
+        if (errors) {
+            extendedErrors = inferRulesFromAttributes(errors, props.form);
+            validationErrors = getValidationErrors(extendedErrors, props.form.model, props);
+        }
+
+        if (warnings) {
+            validationWarnings = getValidationErrors(warnings, props.form.modal, props);
+        }
+
         return React.createElement(
             WrappedComponent,
             Object.assign({}, props, {
                 form: {
                     ...props.form,
                     isValid: isEmpty(validationErrors),
-                    validationErrors
+                    errors: validationErrors,
+                    warnings: validationWarnings
                 }
             })
         );

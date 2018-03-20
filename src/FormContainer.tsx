@@ -118,4 +118,4 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
 };
 
 export const connectForm = <T extends {} = any>(config: IFormConfig<T> = {}) => (Component: any) =>
-    flow([validation.validate(config.validators), makeWrapper<T>(config)])(Component);
+    flow([validation.validate(config), makeWrapper<T>(config)])(Component);

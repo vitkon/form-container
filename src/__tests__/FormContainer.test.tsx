@@ -31,12 +31,21 @@ describe('Form container', () => {
         expect(connectForm).toBeDefined;
     });
 
-    it('should call validate function', () => {
+    it('should call error validate function', () => {
         const mock = jest.fn(rules => component => component);
         (validation as any).validate = jest.fn(rules => component => component);
-        const { wrappedComponent } = setupTest({ validators: [isRequired] });
+        const { wrappedComponent } = setupTest({ errors: [isRequired] });
         expect(validation.validate).toHaveBeenCalledTimes(1);
-        expect(validation.validate).toHaveBeenCalledWith([isRequired]);
+        expect(validation.validate).toHaveBeenCalledWith({ errors: [isRequired] });
+        mock.mockClear();
+    });
+
+    it('should call warning validate function', () => {
+        const mock = jest.fn(rules => component => component);
+        (validation as any).validate = jest.fn(rules => component => component);
+        const { wrappedComponent } = setupTest({ warnings: [isRequired] });
+        expect(validation.validate).toHaveBeenCalledTimes(1);
+        expect(validation.validate).toHaveBeenCalledWith({ warnings: [isRequired] });
         mock.mockClear();
     });
 

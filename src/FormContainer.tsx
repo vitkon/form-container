@@ -74,8 +74,12 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
             value: this.getValue(name),
             onChange: this.bindToChangeEvent,
             onFocus: this.bindToFocusEvent,
-            onBlur: this.bindToBlurEvent,
-            ref: (input: any) => {
+            onBlur: this.bindToBlurEvent
+        });
+
+        bindNativeInput = (name: keyof T): IBoundInput => ({
+            ...this.bindInput(name),
+            ref: (input: HTMLInputElement) => {
                 if (!this.state.inputs[name]) {
                     this.setState({
                         inputs: {
@@ -96,6 +100,7 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
                 },
                 formMethods: {
                     bindInput: this.bindInput,
+                    bindNativeInput: this.bindNativeInput,
                     bindToChangeEvent: this.bindToChangeEvent,
                     setProperty: this.setProperty,
                     setModel: this.setModel,

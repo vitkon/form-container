@@ -23,6 +23,7 @@ export interface IBoundInput {
 
 export interface IFormMethods<T = any> {
     bindInput: (name: keyof T) => IBoundInput;
+    bindNativeInput: (name: keyof T) => IBoundInput;
     bindToChangeEvent: (e: React.ChangeEvent<any>) => void;
     setProperty: (prop: keyof T, value: T[keyof T]) => any;
     setModel: (model: { [name in keyof T]?: any }) => any;

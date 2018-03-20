@@ -8,9 +8,6 @@ export const ValidationRuleFactory: any = (
     { [prop]: message }
 ];
 
-export const isRequired: ValidationRule = ValidationRuleFactory(
-    (value: any) => !!value,
-    'Required field'
-);
+export const isRequired = ValidationRuleFactory((value: any) => !!value, 'Required field');
 
-export const hasError: ValidationRule = ValidationRuleFactory((value: any) => false, 'Error');
+export const hasError = ValidationRuleFactory((value: any) => false, 'Error');

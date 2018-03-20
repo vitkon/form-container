@@ -5,14 +5,14 @@ import { connectForm } from '../FormContainer';
 import * as validation from '../validate';
 import { isRequired } from '../validators';
 
-const setupTest = (formConfig = {}, validators = []) => {
+const setupTest = (formConfig = {}) => {
     const MockComponent = ({ formMethods: { bindInput, bindNativeInput }, form }) => (
         <form>
             <input {...bindInput('foo')} />
             <input {...bindNativeInput('nativeFoo')} />
         </form>
     );
-    const WrapperComponent = connectForm(validators, formConfig)(MockComponent);
+    const WrapperComponent = connectForm(formConfig)(MockComponent);
     const wrapperComponent = mount(<WrapperComponent />);
     const wrappedComponent = wrapperComponent.find(MockComponent);
     const input = wrapperComponent.find('[name="foo"]');
@@ -31,12 +31,21 @@ describe('Form container', () => {
         expect(connectForm).toBeDefined;
     });
 
-    it('should call validate function', () => {
+    it('should call error validate function', () => {
         const mock = jest.fn(rules => component => component);
         (validation as any).validate = jest.fn(rules => component => component);
-        const { wrappedComponent } = setupTest({}, [isRequired]);
+        const { wrappedComponent } = setupTest({ errors: [isRequired] });
         expect(validation.validate).toHaveBeenCalledTimes(1);
-        expect(validation.validate).toHaveBeenCalledWith([isRequired]);
+        expect(validation.validate).toHaveBeenCalledWith({ errors: [isRequired] });
+        mock.mockClear();
+    });
+
+    it('should call warning validate function', () => {
+        const mock = jest.fn(rules => component => component);
+        (validation as any).validate = jest.fn(rules => component => component);
+        const { wrappedComponent } = setupTest({ warnings: [isRequired] });
+        expect(validation.validate).toHaveBeenCalledTimes(1);
+        expect(validation.validate).toHaveBeenCalledWith({ warnings: [isRequired] });
         mock.mockClear();
     });
 

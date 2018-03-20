@@ -117,7 +117,5 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
     return hoistNonReactStatics(FormWrapper, WrappedComponent);
 };
 
-export const connectForm = <T extends {} = any>(
-    validators: any[] = [],
-    config: IFormConfig<T> = {}
-) => (Component: any) => flow([validation.validate(validators), makeWrapper<T>(config)])(Component);
+export const connectForm = <T extends {} = any>(config: IFormConfig<T> = {}) => (Component: any) =>
+    flow([validation.validate(config), makeWrapper<T>(config)])(Component);

@@ -35,7 +35,8 @@ export interface IFormProps<T = any> {
         model: any;
         inputs: any;
         isValid?: boolean;
-        validationErrors: { [key: string]: string };
+        errors: { [key: string]: string };
+        warnings: { [key: string]: string };
         touched: { [key: string]: boolean };
     };
     formMethods: IFormMethods<T>;
@@ -46,4 +47,6 @@ export interface IFormConfig<T = object, M = object> {
     initialModel?: Partial<T>;
     onInputBlur?: (e: React.FocusEvent<any>) => any;
     middleware?: (props: T) => T & M;
+    errors?: ValidationRule[];
+    warnings?: ValidationRule[];
 }

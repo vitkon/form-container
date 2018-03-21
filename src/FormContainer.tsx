@@ -5,7 +5,7 @@ import { IFormConfig, IBoundInput } from './interfaces';
 
 const hoistNonReactStatics = require('hoist-non-react-statics');
 
-const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: any) => {
+const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent: any) => {
     class FormWrapper extends React.Component<any, any> {
         constructor(props: any, context: any) {
             super(props, context);
@@ -92,7 +92,7 @@ const makeWrapper = <T extends {}>(config: IFormConfig) => (WrappedComponent: an
         });
 
         render() {
-            const nextProps = Object.assign({}, this.props, {
+            const nextProps: any = Object.assign({}, this.props, {
                 form: {
                     model: this.state.model,
                     inputs: this.state.inputs,

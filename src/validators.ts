@@ -1,16 +1,18 @@
-import { ValidationRule } from './interfaces';
+import { ValidationRule, ErrorMessage, Validator, ValidationType } from './interfaces';
 
 export const ValidationRuleFactory: any = (
     validationFn: (value: any, allProps?: any) => boolean,
     errorMessage: string
-): ValidationRule => (prop, message = errorMessage) => [
+): ValidationRule => (
+    prop,
+    message = errorMessage,
+    type = ValidationType.Error
+): [Validator, ErrorMessage, ValidationType] => [
     (model, allProps) => validationFn(model[prop], allProps),
-    { [prop]: message }
+    { [prop]: message },
+    type
 ];
 
-export const isRequired: ValidationRule = ValidationRuleFactory(
-    (value: any) => !!value,
-    'Required field'
-);
+export const isRequired = ValidationRuleFactory((value: any) => !!value, 'Required field');
 
-export const hasError: ValidationRule = ValidationRuleFactory((value: any) => false, 'Error');
+export const hasError = ValidationRuleFactory((value: any) => false, 'Error');

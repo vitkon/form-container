@@ -31,3 +31,7 @@
 .error {
     color: magenta;
 }
+
+.warning {
+    color: yellow;
+}

@@ -2,7 +2,7 @@ import { ValidationRule, ErrorMessage, Validator, ValidationType } from './inter
 
 export const ValidationRuleFactory: any = (
     validationFn: (value: any, allProps?: any) => boolean,
-    errorMessage: string
+    errorMessage: string,
     errorType = ValidationType.Error
 ): ValidationRule => (
     prop,

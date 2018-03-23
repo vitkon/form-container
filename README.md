@@ -8,7 +8,7 @@ It allows you to use both HTML5 form validation and custom validation functions.
 ## TL;DR
 It provides your child form with 2 objects of props:  
 
-*   `form` - all data on your form values, states, errors and warning
+*   `form` - all data on your form values, states, errors and warnings
 *   `formMethods` - methods to bind your input controllers and manipulate the form model
 
 [See the demo](https://codesandbox.io/embed/1r1kw355m4) of `form-container` with `material-ui` controls  

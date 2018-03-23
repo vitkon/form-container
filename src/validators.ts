@@ -2,11 +2,12 @@ import { ValidationRule, ErrorMessage, Validator, ValidationType } from './inter
 
 export const ValidationRuleFactory: any = (
     validationFn: (value: any, allProps?: any) => boolean,
-    errorMessage: string
+    errorMessage: string,
+    errorType = ValidationType.Error
 ): ValidationRule => (
     prop,
     message = errorMessage,
-    type = ValidationType.Error
+    type = errorType
 ): [Validator, ErrorMessage, ValidationType] => [
     (model, allProps) => validationFn(model[prop], allProps),
     { [prop]: message },

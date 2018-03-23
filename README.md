@@ -6,7 +6,7 @@ Form container is a lightweight React form container with validation (written in
 It allows you to use both HTML5 form validation and custom validation functions.
 
 ## TL;DR
-[See the demo](https://codesandbox.io/embed/1r1kw355m4) of `form-container` with `material-ui` controls
+[See the demo](https://codesandbox.io/s/1r1kw355m4) of `form-container` with `material-ui` controls
 
 It provides your child form with 2 objects of props:
 

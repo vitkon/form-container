@@ -1,6 +1,6 @@
 {
   "name": "form-container",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "engines": {
     "node": ">=6.0.0"
   },
@@ -21,8 +21,7 @@
     "test:dev": "npm run test -- --watch",
     "clean": "shx rm -rf _bundles lib lib-esm",
     "build": "rimraf dist && webpack --hide-modules && rimraf dist/ts-build",
-    "precommit": "pretty-quick --staged",
-    "publish": "np --no-publish"
+    "precommit": "pretty-quick --staged"
   },
   "repository": {
     "type": "git",

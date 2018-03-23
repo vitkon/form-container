@@ -15,7 +15,7 @@ export type ValidationRule = <T = any>(
 
 export type ValidationRuleResult = [Validator, ErrorMessage, ValidationType];
 
-export const enum ValidationType {
+export enum ValidationType {
     Error = 'error',
     Warning = 'warning'
 }

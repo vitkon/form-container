@@ -21,7 +21,8 @@
     "test:dev": "npm run test -- --watch",
     "clean": "shx rm -rf _bundles lib lib-esm",
     "build": "rimraf dist && webpack --hide-modules && rimraf dist/ts-build",
-    "precommit": "pretty-quick --staged"
+    "precommit": "pretty-quick --staged",
+    "publish": "np --no-publish"
   },
   "repository": {
     "type": "git",

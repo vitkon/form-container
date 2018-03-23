@@ -28,4 +28,5 @@ deploy:
   email: $NPM_DEPLOY_EMAIL
   api_key: $NPM_DEPLOY_API_KEY
   on:
-    branch: release
+    branch: master
+    tags: true

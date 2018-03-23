@@ -22,3 +22,11 @@ after_script: greenkeeper-lockfile-upload
 after_success:
   - cat ./coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+
+deploy:
+  provider: npm
+  email: $NPM_DEPLOY_EMAIL
+  api_key: $NPM_DEPLOY_API_KEY
+  on:
+    branch: master
+    tags: true

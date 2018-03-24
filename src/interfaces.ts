@@ -7,6 +7,8 @@ export type ErrorMessage = {
     [name: string]: string | undefined;
 };
 
+export type Condition = (value: string) => boolean;
+
 export type ValidationRule = <T = any>(
     prop: keyof T,
     errorMessage: string,

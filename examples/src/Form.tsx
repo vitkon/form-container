@@ -1,61 +1,70 @@
 import * as React from 'react';
-import { connectForm, IFormProps } from '../../src/main';
-import JSONTree from 'react-json-tree';
-import * as styles from './form.module.css';
+import { connectForm, IFormProps } from 'form-container';
+import { email, required, alphaNumeric, strongPassword } from './validators';
+import { TextField, Button, CardActions, CardHeader, CardContent } from 'material-ui-next';
 
-import { isRequired } from '../../src/validators';
-import { ValidationType, ValidationRule } from '../../src/interfaces';
+interface IProps extends IFormProps {}
 
-export interface IProps extends IFormProps {}
+class Form extends React.Component<IProps, {}> {
+    handleSubmit = (e: React.SyntheticEvent<any>) => {
+        e.preventDefault();
 
-export const Form: React.SFC<IProps> = ({
-    form,
-    form: { validationErrors, validationWarnings },
-    formMethods: { bindInput }
-}) => (
-    <div className={styles.view}>
-        <div className={styles.form}>
-            <h1>Login Form</h1>
-            <form name="login-form">
-                <label className={styles.label}>
-                    Username:
-                    <input {...bindInput('username')} />
-                    <span className={styles.error}>{validationErrors['username']}</span>
-                    <span className={styles.warning}>{validationWarnings['username']}</span>
-                </label>
-                <label className={styles.label}>
-                    Password:
-                    <input type="password" {...bindInput('password')} />
-                    <span className={styles.error}>{validationErrors['password']}</span>
-                    <span className={styles.warning}>{validationWarnings['password']}</span>
-                </label>
+        if (!this.props.form.isValid) {
+            console.error('Please fix all errors on the form before submission');
+            return;
+        }
+
+        const { model } = this.props.form;
+        console.log(model);
+    };
+
+    dirtyInputError = (prop: string) =>
+        this.props.form.touched[prop] && this.props.form.validationErrors[prop];
+
+    render() {
+        const { formMethods: { bindInput } } = this.props;
+        console.log(this.props.form);
+        return (
+            <form name="login" onSubmit={this.handleSubmit}>
+                <CardHeader title="Sign in" subheader="form-container example" />
+                <CardContent>
+                    <TextField
+                        style={{ marginBottom: '20px' }}
+                        label="Enter your email"
+                        fullWidth={true}
+                        error={!!this.dirtyInputError('email')}
+                        helperText={this.dirtyInputError('email')}
+                        {...bindInput('email')}
+                    />
+                    <TextField
+                        type="password"
+                        style={{ marginBottom: '20px' }}
+                        label="Enter your password"
+                        fullWidth={true}
+                        error={!!this.dirtyInputError('password')}
+                        helperText={
+                            this.dirtyInputError('password') ||
+                            this.props.form.validationWarnings.password
+                        }
+                        {...bindInput('password')}
+                    />
+                </CardContent>
+                <CardActions>
+                    <Button fullWidth={true} type="submit" color="primary">
+                        Sign in
+                    </Button>
+                </CardActions>
             </form>
-        </div>
-        <div className={styles.json}>
-            <JSONTree data={form} />
-        </div>
-    </div>
-);
-
-const hasMoreThanFiveChars: ValidationRule = (
-    prop,
-    errorMessage = `${prop} is less than 5 chars`,
-    type: ValidationType = ValidationType.Error
-) => [model => (model[prop] ? model[prop].length >= 5 : true), { [prop]: errorMessage }, type];
-
-export const ConnectedForm = connectForm<IProps>(
-    [
-        isRequired('username', 'please enter your username'), // error by default
-        isRequired('password', 'please enter your password', ValidationType.Error),
-        hasMoreThanFiveChars(
-            'password',
-            'you might want to enter a longer password',
-            ValidationType.Warning
-        )
-    ],
-    {
-        middleware: props => ({
-            ...props
-        })
+        );
     }
-)(Form);
+}
+
+const validators = [
+    required('email'),
+    required('password'),
+    email('email'),
+    alphaNumeric('password'),
+    strongPassword('password')
+];
+
+export const ConnectedForm = connectForm(validators)(Form);

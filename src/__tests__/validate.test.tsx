@@ -2,9 +2,12 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { mount } from 'enzyme';
 import * as validation from '../validate';
-import { isRequired } from '../validators';
-import { ValidationType } from '../interfaces';
+import { ValidationType, Condition } from '../interfaces';
+import { ValidationRuleFactory } from '../validators';
 const hoistNonReactStatics = require('hoist-non-react-statics');
+
+const isRequired: Condition = value => !!value;
+const required = ValidationRuleFactory(isRequired, 'This field is required');
 
 describe('Validation', () => {
     describe('validate error validator', () => {
@@ -21,7 +24,7 @@ describe('Validation', () => {
                     }
                 }
             };
-            const result = validation.validate([isRequired('foo', 'Required field')])(
+            const result = validation.validate([required('foo', 'Required field')])(
                 MockComponent as any
             )(props);
             expect(result.props).toEqual({
@@ -49,7 +52,7 @@ describe('Validation', () => {
                     }
                 }
             };
-            const result = validation.validate([isRequired('foo', 'Required field')])(
+            const result = validation.validate([required('foo', 'Required field')])(
                 MockComponent as any
             )(props);
             expect(result.props).toEqual({
@@ -82,7 +85,7 @@ describe('Validation', () => {
                 }
             };
             const result = validation.validate([
-                isRequired('foo', 'Required field', ValidationType.Warning)
+                required('foo', 'Required field', ValidationType.Warning)
             ])(MockComponent as any)(props);
             expect(result.props).toEqual({
                 form: {
@@ -110,7 +113,7 @@ describe('Validation', () => {
                 }
             };
             const result = validation.validate([
-                isRequired('foo', 'Required field', ValidationType.Warning)
+                required('foo', 'Required field', ValidationType.Warning)
             ])(MockComponent as any)(props);
             expect(result.props).toEqual({
                 form: {

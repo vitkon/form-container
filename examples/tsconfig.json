@@ -1,11 +1,30 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
+    "outDir": "build/dist",
+    "module": "esnext",
     "target": "es5",
-    "strict": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "lib": ["es6", "dom"],
+    "sourceMap": true,
+    "allowJs": true,
     "jsx": "react",
-    "lib": ["es7", "dom" ]
-  }
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+    "scripts",
+    "acceptance-tests",
+    "webpack",
+    "jest",
+    "src/setupTests.ts"
+  ]
 }

@@ -20,6 +20,7 @@
     "@types/jest": "^22.2.2",
     "@types/node": "^9.6.0",
     "@types/react-dom": "^16.0.4",
+    "@types/validator": "^9.4.0",
     "typescript": "^2.7.2"
   }
 }

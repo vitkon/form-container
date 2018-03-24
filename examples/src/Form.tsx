@@ -22,8 +22,8 @@ class Form extends React.Component<IProps, {}> {
         this.props.form.touched[prop] && this.props.form.validationErrors[prop];
 
     render() {
-        const { formMethods: { bindInput } } = this.props;
-        console.log(this.props.form);
+        const { formMethods: { bindInput }, form } = this.props;
+
         return (
             <form name="login" onSubmit={this.handleSubmit}>
                 <CardHeader title="Sign in" subheader="form-container example" />
@@ -43,14 +43,13 @@ class Form extends React.Component<IProps, {}> {
                         fullWidth={true}
                         error={!!this.dirtyInputError('password')}
                         helperText={
-                            this.dirtyInputError('password') ||
-                            this.props.form.validationWarnings.password
+                            this.dirtyInputError('password') || form.validationWarnings.password
                         }
                         {...bindInput('password')}
                     />
                 </CardContent>
                 <CardActions>
-                    <Button fullWidth={true} type="submit" color="primary">
+                    <Button fullWidth={true} type="submit" color="primary" disabled={!form.isValid}>
                         Sign in
                     </Button>
                 </CardActions>

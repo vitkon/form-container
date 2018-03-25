@@ -3,7 +3,11 @@ import * as ReactDOM from 'react-dom';
 import { mount } from 'enzyme';
 import { connectForm } from '../FormContainer';
 import * as validation from '../validate';
-import { isRequired } from '../validators';
+import { ValidationRuleFactory } from '../validators';
+import { Condition } from '../interfaces';
+
+const isRequired: Condition = value => !!value;
+const required = ValidationRuleFactory(isRequired, 'This field is required');
 
 const setupTest = (formConfig = {}, validators = []) => {
     const MockComponent = ({ formMethods: { bindInput, bindNativeInput }, form }) => (

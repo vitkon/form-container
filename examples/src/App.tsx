@@ -1,8 +1,15 @@
 import * as React from 'react';
 import { ConnectedForm } from './Form';
+import './App.css';
 
-export const App: React.SFC<{}> = () => (
-    <div>
-        <ConnectedForm />
-    </div>
-);
+class App extends React.Component {
+    render() {
+        return (
+            <div className="App">
+                <ConnectedForm />
+            </div>
+        );
+    }
+}
+
+export default App;

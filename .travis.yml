@@ -1,16 +1,17 @@
 language: node_js
 node_js:
   - "stable"
-cache:
-  directories:
-  - node_modules
+install:
+  - npm install
 script:
   - npm test
   - npm run test:coverage
   - npm run build
+  - cd examples && npm install && npm run build
 cache:
   directories:
     - node_modules
+    - "$HOME/.npm"
 
 before_install:
   - npm install codecov.io coveralls

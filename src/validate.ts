@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { get, isEmpty, forEach } from 'lodash';
+
 import { hasError } from './validators';
 import { ComponentInstance, ValidationType, ValidationRuleResult, IFormProps } from './interfaces';
+import { isEmpty } from './utils';
 
 const hoistNonReactStatics = require('hoist-non-react-statics');
 
@@ -34,12 +35,15 @@ const getValidationResult = ({
 const inferRulesFromAttributes = (rules: any[], { inputs }: any) => {
     const extendedRules = [...rules];
 
-    forEach(inputs, (input: any) => {
-        if (get(input, 'validity.valid') === false) {
-            const rule = hasError(input.name, input.validationMessage);
-            extendedRules.push(rule);
+    for (const prop in inputs) {
+        if (inputs.hasOwnProperty(prop)) {
+            const input = inputs[prop];
+            if (input && input.validity && input.validity.valid === false) {
+                const rule = hasError(input.name, input.validationMessage);
+                extendedRules.push(rule);
+            }
         }
-    });
+    }
 
     return extendedRules;
 };

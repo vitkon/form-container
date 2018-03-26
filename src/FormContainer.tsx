@@ -2,7 +2,8 @@ import * as React from 'react';
 import { pipe, isNil } from './utils';
 
 import * as validation from './validate';
-import { IFormConfig, IBoundInput } from './interfaces';
+import { IFormConfig, IBoundInput, IFormProps } from './interfaces';
+import { ReactElement } from 'react';
 
 const hoistNonReactStatics = require('hoist-non-react-statics');
 
@@ -13,7 +14,8 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
             this.state = {
                 model: config.initialModel || {},
                 touched: {},
-                inputs: {}
+                inputs: {},
+                shouldValidate: {}
             };
         }
 
@@ -32,6 +34,12 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
 
         setFieldToTouched = (prop: keyof T) =>
             this.setTouched(Object.assign({}, this.state.touched, { [prop]: true }));
+
+        setShouldValidate = (prop: keyof T, isSet: boolean = true) => {
+            const shouldValidate = Object.assign({}, this.state.shouldValidate, { [prop]: isSet });
+            this.setState({ shouldValidate });
+            return shouldValidate;
+        };
 
         getValue = (name: keyof T) => {
             const { state: { model: { [name]: modelValue } } } = this;
@@ -97,7 +105,8 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
                 form: {
                     model: this.state.model,
                     inputs: this.state.inputs,
-                    touched: this.state.touched
+                    touched: this.state.touched,
+                    shouldValidate: this.state.shouldValidate
                 },
                 formMethods: {
                     bindInput: this.bindInput,
@@ -105,7 +114,8 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
                     bindToChangeEvent: this.bindToChangeEvent,
                     setProperty: this.setProperty,
                     setModel: this.setModel,
-                    setFieldToTouched: this.setFieldToTouched
+                    setFieldToTouched: this.setFieldToTouched,
+                    setShouldValidate: this.setShouldValidate
                 }
             });
 
@@ -122,3 +132,34 @@ export const connectForm = <T extends {} = any>(
     validators: any[] = [],
     config: IFormConfig<T> = {}
 ) => (Component: any) => pipe(validation.validate(validators), makeWrapper<T>(config))(Component);
+
+export interface IControlProps extends IFormProps {
+    name: string;
+    shouldValidate?: boolean;
+}
+
+export class Control extends React.Component<IControlProps, {}> {
+    componentDidMount() {
+        this.setShouldValidate();
+    }
+
+    componentWillReceiveProps(nextProps: IControlProps) {
+        if (nextProps.shouldValidate !== this.props.shouldValidate) {
+            this.setShouldValidate();
+        }
+    }
+
+    private setShouldValidate() {
+        const { shouldValidate, formMethods } = this.props;
+        if (shouldValidate !== undefined) {
+            formMethods.setShouldValidate(this.props.name, shouldValidate);
+        }
+    }
+
+    render() {
+        const { name, formMethods: { bindInput } } = this.props;
+        return React.Children.map(this.props.children, child =>
+            React.cloneElement(child as ReactElement<any>, { ...bindInput(name) })
+        );
+    }
+}

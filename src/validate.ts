@@ -20,6 +20,13 @@ const getValidationResult = ({
     rules
         .filter(([rule, field, type = ValidationType.Error]) => type === validationType)
         .reduce((errors, [rule, field, type]) => {
+            const fieldKey = Object.keys(field)[0];
+            const shouldValidate = allProps.form.shouldValidate[fieldKey];
+
+            if (shouldValidate === false) {
+                return errors; // skip further validation
+            }
+
             const isValid = rule(model, allProps);
 
             if (isValid) {

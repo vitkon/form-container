@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { connectForm, IFormProps } from 'form-container';
+import { connectForm, IFormProps, Control } from 'form-container';
 import { email, required, alphaNumeric, strongPassword } from './validators';
 import { TextField, Button, CardActions, CardHeader, CardContent } from 'material-ui-next';
 
@@ -28,14 +28,15 @@ class Form extends React.Component<IProps, {}> {
             <form name="login" onSubmit={this.handleSubmit}>
                 <CardHeader title="Sign in" subheader="form-container example" />
                 <CardContent>
-                    <TextField
-                        style={{ marginBottom: '20px' }}
-                        label="Enter your email"
-                        fullWidth={true}
-                        error={!!this.dirtyInputError('email')}
-                        helperText={this.dirtyInputError('email')}
-                        {...bindInput('email')}
-                    />
+                    <Control name="email" shouldValidate={false} {...this.props}>
+                        <TextField
+                            style={{ marginBottom: '20px' }}
+                            label="Enter your email"
+                            fullWidth={true}
+                            error={!!this.dirtyInputError('email')}
+                            helperText={this.dirtyInputError('email')}
+                        />
+                    </Control>
                     <TextField
                         type="password"
                         style={{ marginBottom: '20px' }}

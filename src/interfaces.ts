@@ -38,6 +38,7 @@ export interface IFormMethods<T = any> {
     setProperty: (prop: keyof T, value: T[keyof T]) => any;
     setModel: (model: { [name in keyof T]?: any }) => any;
     setFieldToTouched: (prop: keyof T) => any;
+    setShouldValidate: (prop: keyof T, isSet: boolean) => any;
 }
 
 export interface IFormProps<T = any> {

@@ -1,6 +1,6 @@
 {
   "name": "form-container",
-  "version": "0.2.4-rc11",
+  "version": "0.2.4",
   "engines": {
     "node": ">=6.0.0"
   },

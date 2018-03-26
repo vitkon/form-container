@@ -1,6 +1,10 @@
 .*
 **/tsconfig.json
 **/webpack.config.js
+**/tslint.json
+**/setupTests.ts
 
 node_modules
 src
+examples
+coverage

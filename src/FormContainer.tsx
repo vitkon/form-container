@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { flow, isNil } from 'lodash';
+import { pipe, isNil } from './utils';
+
 import * as validation from './validate';
 import { IFormConfig, IBoundInput } from './interfaces';
 
@@ -120,4 +121,4 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
 export const connectForm = <T extends {} = any>(
     validators: any[] = [],
     config: IFormConfig<T> = {}
-) => (Component: any) => flow([validation.validate(validators), makeWrapper<T>(config)])(Component);
+) => (Component: any) => pipe(validation.validate(validators), makeWrapper<T>(config))(Component);

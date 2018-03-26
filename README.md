@@ -115,7 +115,7 @@ export default connectForm(validators, formConfig)(Form);
 ```javascript
 // components/Form.tsx
 import * as React from 'react';
-import { connectForm, IFormProps } from 'form-container';
+import { connectForm, ValidationRuleFactory, Condition, IFormProps } from 'form-container';
 
 interface IProps extends IFormProps {}
 
@@ -142,16 +142,17 @@ export class Form extends React.PureComponent<IProps, {}> {
 }
 
 // custom validator
-const hasMoreThanFiveChars: ValidationRule = (
-    prop,
-    errorMessage = `${prop} is less than 5 chars`,
-    type: ValidationType = ValidationType.Error
-) => [model => (model[prop] ? model[prop].length >= 5 : true), { [prop]: errorMessage }, type];
+const hasMoreThan6Chars: Condition = value => (value ? value.length > 6 : true);
+export const strongPassword = ValidationRuleFactory(
+    hasMoreThan6Chars,
+    'We recommend password to contain more than 6 characters for security purposes',
+    'warning'
+);
 
 // all validators for the form
 const validators = [
-    isRequired('test'), // error by default
-    hasMoreThanFiveChars('test', null, ErrorType.Warning) // optional for warning
+    isRequired('test'),
+    strongPassword('test')
 ];
 
 // attaching our Form to form-container with validation

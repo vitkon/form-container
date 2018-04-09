@@ -90,6 +90,27 @@ describe('Form container', () => {
         });
     });
 
+    describe('setModel', () => {
+        it('should set the model and optionally set the touched field', () => {
+            const { wrapperComponent, wrappedComponent } = setupTest();
+            let state: any = wrapperComponent.state();
+
+            const setModel = wrappedComponent.props().formMethods.setModel;
+
+            let data = { foo: 2 };
+            setModel(data);
+            state = wrapperComponent.state();
+            expect(state.model).toEqual(data);
+            expect(state.touched).toEqual({});
+
+            let data = { bar: 1234 };
+            setModel(data, true);
+            state = wrapperComponent.state();
+            expect(state.model).toEqual(data);
+            expect(state.touched).toEqual({ bar: true });
+        });
+    });
+
     describe('bindInput', () => {
         it('should have an input with a name and a value', () => {
             const { input } = setupTest();

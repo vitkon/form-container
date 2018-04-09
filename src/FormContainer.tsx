@@ -16,8 +16,17 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
             };
         }
 
-        setModel = (model: { [name in keyof T]: any }) => {
-            this.setState({ model });
+        setModel = (model: { [name in keyof T]: any }, setTouched: boolean = false) => {
+            let touched: { [key: string]: boolean } = this.state.touched;
+
+            if (!setTouched) {
+                this.setState({ model });
+            } else {
+                for (var field in model) {
+                    touched[field] = true;
+                }
+                this.setState({ model, touched });
+            }
             return model;
         };
 

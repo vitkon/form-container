@@ -23,7 +23,13 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
         };
 
         setProperty = (prop: keyof T, value: any) =>
-            this.setModel(Object.assign({}, this.state.model, { [prop]: value }));
+            this.setState((prevState: any) => ({
+                ...prevState,
+                model: {
+                    ...prevState.model,
+                    [prop]: value
+                }
+            }));
 
         setTouched = (touched: { [name in keyof T]: any }) => {
             this.setState({ touched });

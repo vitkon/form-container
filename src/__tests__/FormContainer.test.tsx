@@ -1,16 +1,29 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import { connectForm } from '../FormContainer';
 import * as validation from '../validate';
 import { ValidationRuleFactory } from '../validators';
-import { Condition } from '../interfaces';
+import { Condition, IFormProps } from '../interfaces';
 
 const isRequired: Condition = value => !!value;
 const required = ValidationRuleFactory(isRequired, 'This field is required');
 
+class MockComponent extends React.Component<IFormProps> {
+    render() {
+        const { formMethods: { bindInput, bindNativeInput, setProperty }, form } = this.props;
+
+        return (
+            <form>
+                <input {...bindInput('foo')} />
+                <input {...bindNativeInput('nativeFoo')} />
+            </form>
+        );
+    }
+}
+
 const setupTest = (formConfig = {}, validators = []) => {
-    const MockComponent = ({ formMethods: { bindInput, bindNativeInput }, form }) => (
+    ({ formMethods: { bindInput, bindNativeInput, setProperty }, form }) => (
         <form>
             <input {...bindInput('foo')} />
             <input {...bindNativeInput('nativeFoo')} />
@@ -167,6 +180,27 @@ describe('Form container', () => {
             const middleware = (props: any) => ({ ...props, bar: 'baz' });
             const { wrappedComponent } = setupTest({ middleware });
             expect(wrappedComponent.props()).toHaveProperty('bar');
+        });
+    });
+
+    describe('setProperty', () => {
+        it('should should set property', () => {
+            const foo = 'bananas';
+            const bar = 'cherries';
+            const baz = 'plums';
+            const initialModel = { foo };
+            const { wrappedComponent, wrapperComponent } = setupTest({ initialModel });
+            const instance: any = wrapperComponent.instance();
+
+            const formMethods = wrappedComponent.prop('formMethods');
+            formMethods.setProperty('bar', bar);
+            formMethods.setProperty('baz', baz);
+
+            expect(wrapperComponent.state().model).toEqual({
+                foo,
+                bar,
+                baz
+            });
         });
     });
 });

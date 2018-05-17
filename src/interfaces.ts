@@ -31,8 +31,22 @@ export interface IBoundInput {
     ref?: (input: any) => void;
 }
 
+export interface IBoundFields<T = any> {
+    name: string;
+    values: T;
+}
+
+export interface IBoundInputs<T = any> {
+    fields: IBoundFields<T>[];
+    onChange: (e: React.ChangeEvent<any>) => void;
+    onFocus: (e: React.FocusEvent<any>) => void;
+    onBlur: (e: React.FocusEvent<any>) => void;
+    ref?: (input: any) => void;
+}
+
 export interface IFormMethods<T = any> {
     bindInput: (name: keyof T) => IBoundInput;
+    bindInputArray: (name: keyof T) => IBoundInputs;
     bindNativeInput: (name: keyof T) => IBoundInput;
     bindToChangeEvent: (e: React.ChangeEvent<any>) => void;
     setProperty: (prop: keyof T, value: T[keyof T]) => any;

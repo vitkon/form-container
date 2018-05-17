@@ -21,6 +21,7 @@
     "test:dev": "npm run test -- --watch",
     "clean": "shx rm -rf _bundles lib lib-esm",
     "build": "rimraf dist && webpack --hide-modules && rimraf dist/ts-build",
+    "build:watch": "rimraf dist && webpack --hide-modules -w && rimraf dist/ts-build",
     "precommit": "pretty-quick --staged",
     "release:next": "npm publish --tag next"
   },
@@ -31,6 +32,7 @@
   "license": "MIT",
   "dependencies": {
     "hoist-non-react-statics": "^2.3.1",
+    "lodash": "^4.17.10",
     "react": "^16.1.0"
   },
   "devDependencies": {

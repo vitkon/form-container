@@ -4,7 +4,7 @@ import { mount, shallow } from 'enzyme';
 import { connectForm } from '../FormContainer';
 import * as validation from '../validate';
 import { ValidationRuleFactory } from '../validators';
-import { Condition, IFormProps } from '../interfaces';
+import { Condition, IFormProps, IBoundInput, IBoundInputs } from '../interfaces';
 
 const isRequired: Condition = value => !!value;
 const required = ValidationRuleFactory(isRequired, 'This field is required');
@@ -202,5 +202,54 @@ describe('Form container', () => {
                 baz
             });
         });
+    });
+});
+
+const MultipleInputs = (bound: IBoundInputs) => {
+    const { fields, ...rest } = bound;
+
+    return fields.map(({ name, values }, index) => {
+        return (
+            <div key={index}>
+                <input name={`${name}.addressLine1`} value={values.addressLine1} {...rest} />
+                <input name={`${name}.addressLine2`} value={values.addressLine2} {...rest} />
+            </div>
+        );
+    });
+};
+
+class MockComponentWithArray extends React.Component<any> {
+    render() {
+        const { formMethods: { bindInputArray } } = this.props;
+
+        return (
+            <form>
+                <MultipleInputs {...bindInputArray('address')} />
+            </form>
+        );
+    }
+}
+
+describe('set an array value', () => {
+    it.only('should work', () => {
+        const initialModel = {
+            address: [
+                {
+                    addressLine1: 'foo',
+                    addressLine2: 'foo',
+                },
+                {
+                    addressLine1: 'bar',
+                    addressLine2: 'bar',
+                }
+            ]
+        };
+        const WrapperComponent = connectForm([], { initialModel })(MockComponentWithArray);
+        const wrapperComponent = mount(<WrapperComponent />);
+
+        const addressLine11 = wrapperComponent.find('[name="address[0].addressLine1"]');
+        addressLine11.simulate('change', { target: { value: 'giraffe', name: 'address[0].addressLine1' } })
+
+        expect(wrapperComponent.html()).toEqual("<form><div><input name=\"address[0].addressLine1\" value=\"giraffe\"><input name=\"address[0].addressLine2\" value=\"foo\"></div><div><input name=\"address[1].addressLine1\" value=\"bar\"><input name=\"address[1].addressLine2\" value=\"bar\"></div></form>"));
     });
 });

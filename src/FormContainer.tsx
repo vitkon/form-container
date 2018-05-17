@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { pipe, isNil } from './utils';
+const get = require('lodash/get');
+const set = require('lodash/set');
 
 import * as validation from './validate';
-import { IFormConfig, IBoundInput } from './interfaces';
+import { IFormConfig, IBoundInput, IBoundInputs, IBoundFields } from './interfaces';
 
 const hoistNonReactStatics = require('hoist-non-react-statics');
 
@@ -22,14 +24,9 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
             return model;
         };
 
-        setProperty = (prop: keyof T, value: any) =>
-            this.setState((prevState: any) => ({
-                ...prevState,
-                model: {
-                    ...prevState.model,
-                    [prop]: value
-                }
-            }));
+        setProperty = (prop: keyof T, value: any) => {
+            this.setState((prevState: any) => set(prevState, `model.${prop}`, value));
+        };
 
         setTouched = (touched: { [name in keyof T]: any }) => {
             this.setState({ touched });
@@ -40,6 +37,16 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
             this.setTouched(Object.assign({}, this.state.touched, { [prop]: true }));
 
         getValue = (name: keyof T) => {
+            const modelValue = get(this.state.model, name);
+
+            if (!isNil(modelValue)) {
+                return modelValue;
+            }
+
+            return '';
+        };
+
+        getValues = (name: keyof T) => {
             const { state: { model: { [name]: modelValue } } } = this;
 
             if (!isNil(modelValue)) {
@@ -47,6 +54,23 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
             }
 
             return '';
+        };
+
+        getFields = (name: keyof T): IBoundFields[] => {
+            const { state: { model: { [name]: modelValue } } } = this;
+
+            if (!isNil(modelValue)) {
+                const fields = modelValue.map((values: string, index: number): IBoundFields => {
+                    console.log({ values, name, index });
+                    return {
+                        name: `${name}${index}]`,
+                        values
+                    };
+                });
+                return fields;
+            }
+
+            return [];
         };
 
         bindToChangeEvent = (e: React.ChangeEvent<any>): void => {
@@ -84,6 +108,13 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
             onBlur: this.bindToBlurEvent
         });
 
+        bindInputArray = (name: keyof T): IBoundInputs => ({
+            fields: this.getFields(name),
+            onChange: this.bindToChangeEvent,
+            onFocus: this.bindToFocusEvent,
+            onBlur: this.bindToBlurEvent
+        });
+
         bindNativeInput = (name: keyof T): IBoundInput => ({
             ...this.bindInput(name),
             ref: (input: HTMLInputElement) => {
@@ -107,6 +138,7 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
                 },
                 formMethods: {
                     bindInput: this.bindInput,
+                    bindInputArray: this.bindInputArray,
                     bindNativeInput: this.bindNativeInput,
                     bindToChangeEvent: this.bindToChangeEvent,
                     setProperty: this.setProperty,

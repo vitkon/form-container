@@ -5,6 +5,7 @@ import { connectForm } from '../FormContainer';
 import * as validation from '../validate';
 import { ValidationRuleFactory } from '../validators';
 import { Condition, IFormProps } from '../interfaces';
+import { SubmissionError } from '../SubmissionError';
 
 const isRequired: Condition = value => !!value;
 const required = ValidationRuleFactory(isRequired, 'This field is required');
@@ -69,6 +70,7 @@ describe('Form container', () => {
 
             expect(state.model).toEqual({});
             expect(state.touched).toEqual({});
+            expect(state.submitErrors).toEqual({});
             expect(Object.keys(state.inputs)).toEqual(['nativeFoo']);
         });
 
@@ -97,7 +99,8 @@ describe('Form container', () => {
                 'bindToChangeEvent',
                 'setFieldToTouched',
                 'setModel',
-                'setProperty'
+                'setProperty',
+                'handleSubmit'
             ];
 
             expect(wrappedComponent.props()).toHaveProperty('formMethods');
@@ -184,7 +187,7 @@ describe('Form container', () => {
     });
 
     describe('setProperty', () => {
-        it('should should set property', () => {
+        it('should set property', () => {
             const foo = 'bananas';
             const bar = 'cherries';
             const baz = 'plums';
@@ -200,6 +203,108 @@ describe('Form container', () => {
                 foo,
                 bar,
                 baz
+            });
+        });
+    });
+
+    describe('clearSubmitError', () => {
+        it('should unset submissionError if one is present for property', () => {
+            const foo = 'bananas';
+            const bar = 'apples';
+            const baz = 'pears';
+            const initialModel = { foo, bar };
+            const { wrappedComponent, wrapperComponent } = setupTest({ initialModel });
+
+            const submitErrors = {
+                foo: 'Failed',
+                bar: 'Failed badly'
+            };
+            wrapperComponent.setState({ submitErrors });
+
+            const formMethods = wrappedComponent.prop('formMethods');
+            formMethods.clearSubmitError('foo');
+
+            expect(wrapperComponent.state().submitErrors).toEqual({
+                bar: 'Failed badly'
+            });
+        });
+    });
+
+    describe('handleSubmit', () => {
+        it('should call provided submit function with form model', () => {
+            const model = {
+                foo: 'boo',
+                bar: 'woo'
+            };
+            const { wrapperComponent, wrappedComponent } = setupTest({ initialModel: model });
+            const submitResult = {
+                foo: 'bar'
+            };
+            const mockSubmit = jest.fn().mockImplementation(() => Promise.resolve(submitResult));
+
+            const formMethods = wrappedComponent.props().formMethods;
+            formMethods.handleSubmit(mockSubmit)();
+
+            expect(mockSubmit).toHaveBeenCalledTimes(1);
+            expect(mockSubmit).toHaveBeenCalledWith(model);
+        });
+
+        it('should return result of submit', () => {
+            const { wrapperComponent, wrappedComponent } = setupTest();
+            const submitResult = {
+                foo: 'bar'
+            };
+            const mockSubmit = jest.fn().mockImplementation(() => Promise.resolve(submitResult));
+
+            const formMethods = wrappedComponent.props().formMethods;
+            const handleSubmit = formMethods.handleSubmit(mockSubmit);
+
+            return handleSubmit().then(result => {
+                expect(result).toBe(submitResult);
+            });
+        });
+
+        it('should throw errors', () => {
+            const { wrapperComponent, wrappedComponent } = setupTest();
+            const mockSubmit = jest.fn().mockImplementation(() => {
+                throw new Error('Something went wrong!');
+            });
+
+            const formMethods = wrappedComponent.props().formMethods;
+            const handleSubmit = formMethods.handleSubmit(mockSubmit);
+
+            expect(() => handleSubmit()).toThrow('Something went wrong!');
+        });
+
+        it('should set submission errors if SubmissionError is thrown', () => {
+            const { wrapperComponent, wrappedComponent } = setupTest();
+            const submitErrors = {
+                foo: 'Failed!'
+            };
+            const throwableError = new SubmissionError(submitErrors);
+            const mockSubmit = jest.fn().mockImplementation(() => Promise.reject(throwableError));
+
+            const formMethods = wrappedComponent.props().formMethods;
+            const handleSubmit = formMethods.handleSubmit(mockSubmit);
+
+            return handleSubmit().catch(error => {
+                expect(error).toBe(throwableError);
+                expect(wrapperComponent.state().submitErrors).toEqual(submitErrors);
+            });
+        });
+
+        it('should not set submission errors if thrown error is not SubmissionError', () => {
+            const { wrapperComponent, wrappedComponent } = setupTest();
+            const submitErrors = {
+                foo: 'Failed!'
+            };
+            const mockSubmit = jest.fn().mockImplementation(() => Promise.reject(submitErrors));
+
+            const formMethods = wrappedComponent.props().formMethods;
+            const handleSubmit = formMethods.handleSubmit(mockSubmit);
+
+            return handleSubmit().catch(error => {
+                expect(wrapperComponent.state().submitErrors).toEqual({});
             });
         });
     });

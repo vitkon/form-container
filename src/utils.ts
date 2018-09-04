@@ -11,3 +11,12 @@ export const isEmpty = (value: object | null | undefined) => {
 };
 
 export const isNil = (value: any) => value == null;
+
+export const omit = (obj: object, omitKey: string | number | symbol) => {
+    return Object.keys(obj).reduce((result, key) => {
+        if (key !== omitKey) {
+            result[key] = obj[key];
+        }
+        return result;
+    }, {});
+};

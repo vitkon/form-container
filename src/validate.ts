@@ -72,7 +72,7 @@ export const validate = (rules: ValidationRuleResult[] = []) => (
             Object.assign({}, props, {
                 form: {
                     ...props.form,
-                    isValid: isEmpty(validationErrors),
+                    isValid: isEmpty(validationErrors) && isEmpty(props.form.submitErrors),
                     validationErrors,
                     validationWarnings
                 }

@@ -36,8 +36,10 @@ export interface IFormMethods<T = any> {
     bindNativeInput: (name: keyof T) => IBoundInput;
     bindToChangeEvent: (e: React.ChangeEvent<any>) => void;
     setProperty: (prop: keyof T, value: T[keyof T]) => any;
+    clearSubmitError: (props: keyof T) => void;
     setModel: (model: { [name in keyof T]?: any }) => any;
     setFieldToTouched: (prop: keyof T) => any;
+    handleSubmit: <T = any>(submit: (model: any) => Promise<T>) => () => any;
 }
 
 export interface IFormProps<T = any> {
@@ -45,6 +47,7 @@ export interface IFormProps<T = any> {
         model: any;
         inputs: any;
         isValid?: boolean;
+        submitErrors: { [key in keyof T]: string };
         validationErrors: { [key in keyof T]: string };
         validationWarnings: { [key in keyof T]: string };
         touched: { [key: string]: boolean };

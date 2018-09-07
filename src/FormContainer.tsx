@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { pipe, isNil } from './utils';
+import { pipe, isNil, omit } from './utils';
 
 import * as validation from './validate';
+import SubmissionError from './SubmissionError';
 import { IFormConfig, IBoundInput } from './interfaces';
 
 const hoistNonReactStatics = require('hoist-non-react-statics');
@@ -13,7 +14,8 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
             this.state = {
                 model: config.initialModel || {},
                 touched: {},
-                inputs: {}
+                inputs: {},
+                submitErrors: {}
             };
         }
 
@@ -23,13 +25,25 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
         };
 
         setProperty = (prop: keyof T, value: any) =>
-            this.setState((prevState: any) => ({
-                ...prevState,
-                model: {
-                    ...prevState.model,
-                    [prop]: value
-                }
-            }));
+            this.setState((prevState: any) => {
+                return {
+                    ...prevState,
+                    model: {
+                        ...prevState.model,
+                        [prop]: value
+                    }
+                };
+            });
+
+        clearSubmitError = (prop: keyof T) =>
+            this.setState((prevState: any) => {
+                return {
+                    ...prevState,
+                    ...(prevState.submitErrors[prop] && {
+                        submitErrors: omit(prevState.submitErrors, prop)
+                    })
+                };
+            });
 
         setTouched = (touched: { [name in keyof T]: any }) => {
             this.setState({ touched });
@@ -63,6 +77,7 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
             }
 
             this.setProperty(name, value);
+            this.clearSubmitError(name);
         };
 
         bindToFocusEvent = (e: React.FocusEvent<any>): void => {};
@@ -98,20 +113,35 @@ const makeWrapper = <T extends {}>(config: IFormConfig<T>) => (WrappedComponent:
             }
         });
 
+        handleSubmit = (submit: (model: any) => Promise<any>) => () => {
+            return submit(this.state.model).catch((error: any) => {
+                const submitErrors = error instanceof SubmissionError ? error.errors : undefined;
+                if (submitErrors) {
+                    this.setState({ submitErrors });
+                    return submitErrors;
+                } else {
+                    throw error;
+                }
+            });
+        };
+
         render() {
             const nextProps: any = Object.assign({}, this.props, {
                 form: {
                     model: this.state.model,
                     inputs: this.state.inputs,
-                    touched: this.state.touched
+                    touched: this.state.touched,
+                    submitErrors: this.state.submitErrors
                 },
                 formMethods: {
                     bindInput: this.bindInput,
                     bindNativeInput: this.bindNativeInput,
                     bindToChangeEvent: this.bindToChangeEvent,
+                    clearSubmitError: this.clearSubmitError,
                     setProperty: this.setProperty,
                     setModel: this.setModel,
-                    setFieldToTouched: this.setFieldToTouched
+                    setFieldToTouched: this.setFieldToTouched,
+                    handleSubmit: this.handleSubmit
                 }
             });
 

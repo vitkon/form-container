@@ -68,6 +68,40 @@ describe('Validation', () => {
                 }
             });
         });
+
+        it('should return false for isValid where there are submitErrors', () => {
+            const MockComponent = ({ formMethods: { bindInput }, form }) => (
+                <form>
+                    <input {...bindInput('foo')} />
+                </form>
+            );
+            const props = {
+                form: {
+                    model: {
+                        foo: 'boo'
+                    },
+                    submitErrors: {
+                        foo: 'Submit error'
+                    }
+                }
+            };
+            const result = validation.validate([required('foo', 'Required field')])(
+                MockComponent as any
+            )(props);
+            expect(result.props).toEqual({
+                form: {
+                    isValid: false,
+                    model: {
+                        foo: 'boo'
+                    },
+                    submitErrors: {
+                        foo: 'Submit error'
+                    },
+                    validationErrors: {},
+                    validationWarnings: {}
+                }
+            });
+        });
     });
 
     describe('validate warning validator', () => {

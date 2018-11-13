@@ -48,7 +48,7 @@
     "prettier": "^1.11.1",
     "pretty-quick": "^1.4.1",
     "raf": "^3.4.0",
-    "react-dom": "^16.2.0",
+    "react-dom": "^16.6.3",
     "rimraf": "^2.6.2",
     "ts-jest": "^22.0.0",
     "ts-loader": "^3.1.1",

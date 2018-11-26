@@ -5,6 +5,8 @@
 Form container is a lightweight React form container with validation (written in TypeScript).
 It allows you to use both HTML5 form validation and custom validation functions.
 
+_built with ❤️ at [Appfocused](https://www.appfocused.com)_
+
 ## TL;DR
 
 It provides your child form with 2 objects of props:

@@ -41,7 +41,7 @@
     "@types/validator": "^9.4.0",
     "compression-webpack-plugin": "^1.1.11",
     "dts-bundle": "^0.7.3",
-    "enzyme": "^3.2.0",
+    "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.1.0",
     "husky": "^0.14.3",
     "jest": "^22.0.0",

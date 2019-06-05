@@ -39,7 +39,7 @@
     "@types/jest": "^22.0.0",
     "@types/react": "^16.0.22",
     "@types/validator": "^9.4.0",
-    "compression-webpack-plugin": "^1.1.11",
+    "compression-webpack-plugin": "^2.0.0",
     "dts-bundle": "^0.7.3",
     "enzyme": "^3.2.0",
     "enzyme-adapter-react-16": "^1.1.0",
